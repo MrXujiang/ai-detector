@@ -1,0 +1,285 @@
+/* ===== 全局 ===== */
+html { scroll-behavior: smooth; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+
+/* ===== 渐变文字 ===== */
+.text-gradient {
+  background: linear-gradient(135deg, #165DFF 0%, #044AE9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== 卡片悬浮 ===== */
+.card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(22, 93, 255, 0.15); }
+
+/* ===== 按钮光效 ===== */
+.btn-glow { position: relative; overflow: hidden; }
+.btn-glow::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+.btn-glow:hover::before { left: 100%; }
+
+/* ===== 背景网格 ===== */
+.bg-grid {
+  background-image: linear-gradient(rgba(22,93,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22,93,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* ===== 光晕 ===== */
+.glow {
+  position: absolute; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(22,93,255,0.12) 0%, transparent 70%);
+  border-radius: 50%; pointer-events: none;
+}
+
+/* ===== 静态滚动显示（仅用于页面固定元素）===== */
+.scroll-reveal { opacity: 0; transform: translateY(28px); transition: all 0.7s ease; }
+.scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+
+/* ===== 导航栏滚动 ===== */
+.nav-scrolled { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+/* ===== 图标背景 ===== */
+.feature-icon-bg { background: linear-gradient(135deg, rgba(22,93,255,0.1) 0%, rgba(4,74,233,0.05) 100%); }
+
+/* ===== 动画关键帧 ===== */
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+.animate-float { animation: float 5s ease-in-out infinite; }
+
+@keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+
+@keyframes pulse-ring { 0%{transform:scale(1);opacity:0.6} 100%{transform:scale(1.6);opacity:0} }
+.pulse-ring { animation: pulse-ring 1.5s ease-out infinite; }
+
+@keyframes progressFill { from{width:0} }
+.progress-fill { animation: progressFill 1s ease-out forwards; }
+
+@keyframes scanPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.scan-step.active { animation: scanPulse 0.8s ease-in-out infinite; }
+.scan-step.done { opacity: 1; }
+
+/* ===== Tab 过滤按钮 ===== */
+.tab-btn { transition: all 0.2s; }
+.tab-btn.active { background: linear-gradient(135deg, #165DFF 0%, #044AE9 100%); color: white !important; border-color: transparent !important; }
+
+/* ===== 模型卡片：核心修复 =====
+   卡片默认隐藏，通过 .visible 类显示并触发动画
+   不依赖 IntersectionObserver，避免动态渲染后不可见的问题 */
+.model-card { display: none; }
+.model-card.visible {
+  display: flex;
+  flex-direction: column;
+  animation: fadeInUp 0.45s ease-out both;
+}
+
+/* ===== 性能行动画 ===== */
+.perf-row { animation: fadeInUp 0.4s ease-out both; }
+
+/* ===== FAQ 折叠 ===== */
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.accordion-content.open { max-height: 500px; }
+
+/* ===== 评分圆环 ===== */
+#score-circle { transition: stroke-dashoffset 1.2s ease-out; }
+
+/* ===== 导航下拉菜单 ===== */
+.nav-dropdown-menu {
+  position: absolute;
+  top: 100%;               /* 紧贴按钮，通过 padding-top 制造视觉间距 */
+  padding-top: 10px;       /* hover 热区无缝衔接，鼠标不会脱离 */
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  pointer-events: none;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown.open .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.nav-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #151515;
+  transition: background 0.15s;
+}
+.nav-dropdown-item:hover { background: #F0F5FF; }
+
+/* ===== 推荐卡片 ===== */
+.recommend-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1.5px solid #E8ECFF;
+  box-shadow: 0 4px 16px rgba(22, 93, 255, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.5s ease-out both;
+}
+.recommend-card:hover {
+  border-color: rgba(22, 93, 255, 0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(22, 93, 255, 0.12);
+}
+
+/* ===== 升级建议横幅 ===== */
+.upgrade-banner {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  padding: 14px 20px;
+}
+
+/* ===== 模型搜索框 ===== */
+.model-search-input {
+  background: white;
+  border: 1.5px solid #E8ECFF;
+  border-radius: 12px;
+  padding: 10px 16px 10px 40px;
+  outline: none;
+  font-size: 14px;
+  color: #151515;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.model-search-input:focus {
+  border-color: #165DFF;
+  box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.08);
+}
+.model-search-input::placeholder { color: #9CA3AF; }
+
+/* ===== 量化切换按鈕组 ===== */
+.quant-toggle {
+  display: flex;
+  background: #F0F5FF;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.quant-btn {
+  padding: 7px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6C6F7D;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: none;
+  background: transparent;
+  white-space: nowrap;
+}
+.quant-btn.active {
+  background: white;
+  color: #165DFF;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(22, 93, 255, 0.12);
+}
+
+/* ===== 悬浮二维码卡片 ===== */
+.float-qr-wrap {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.float-qr-wrap.float-qr-hidden {
+  display: none;
+}
+
+/* 触发按鈕 */
+.float-qr-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #165DFF 0%, #044AE9 100%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-shadow: 0 4px 16px rgba(22, 93, 255, 0.4);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.float-qr-btn:hover {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 8px 24px rgba(22, 93, 255, 0.5);
+}
+.float-qr-label {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* 卡片本体 */
+.float-qr-card {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  padding: 20px 20px 16px;
+  border: 1.5px solid #E8ECFF;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(22, 93, 255, 0.06);
+  transform-origin: bottom right;
+  animation: floatCardIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  width: 188px;
+}
+@keyframes floatCardIn {
+  from { opacity: 0; transform: scale(0.8) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.float-qr-wrap.float-qr-collapsed .float-qr-card {
+  display: none;
+}
+
+/* 二维码图片 */
+.float-qr-img {
+  border-radius: 12px;
+  width: 148px;
+  height: 148px;
+  object-fit: cover;
+  display: block;
+}
+
+/* 关闭按鈕 */
+.float-qr-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  transition: background 0.15s, color 0.15s;
+}
+.float-qr-close:hover {
+  background: #E5E7EB;
+  color: #111827;
+}

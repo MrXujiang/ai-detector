@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== 基础 SEO ===== -->
+  <title>AI 跑分助手 — 一键检测电脑能跑哪些 AI 大模型 | 硬件检测工具</title>
+  <meta name="description" content="免费在线检测你的电脑配置（内存/CPU/GPU），智能分析可运行的 AI 大模型列表，支持 Llama、Qwen、Phi、Mistral、DeepSeek 等 21+ 主流开源模型兼容性分析，提供运行速度预估与内存需求计算。全程本地运行，无需登录。">
+  <meta name="keywords" content="AI大模型,本地运行,Ollama,LLM,硬件检测,大模型兼容性,Llama,Qwen,量化模型,GPU检测,内存检测,CPU性能,AI跑分,tokens每秒,DeepSeek本地,LM Studio,llama.cpp,开源大模型,AI模型推荐">
+  <meta name="author" content="AI 跑分助手">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jitword.com/ai-detector">
+
+  <!-- ===== Open Graph (社交分享预览) ===== -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AI 跑分助手 — 一键检测电脑能跑哪些 AI 大模型">
+  <meta property="og:description" content="免费检测电脑配置，智能匹配 21+ 主流开源大模型兼容性，获取运行速度预估，找到最适合你电脑的 AI 模型。">
+  <meta property="og:url" content="https://jitword.com/ai-detector">
+  <meta property="og:site_name" content="AI 跑分助手">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- ===== Twitter Card ===== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI 跑分助手 — 一键检测电脑能跑哪些 AI 大模型">
+  <meta name="twitter:description" content="免费检测电脑配置，智能匹配 21+ 主流开源大模型兼容性，获取运行速度预估，找到最适合你电脑的 AI 模型。">
+
+  <!-- ===== JSON-LD 结构化数据 ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AI 跑分助手",
+    "description": "一键检测电脑内存、CPU、GPU 配置，智能匹配 21+ 主流 AI 大模型兼容性，提供运行速度预估。",
+    "url": "https://jitword.com/ai-detector",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web Browser",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+    "featureList": [
+      "硬件自动检测（内存/CPU/GPU）",
+      "21+ 主流 AI 大模型兼容性分析",
+      "tokens/s 运行速度预估",
+      "Q4/Q8 量化模式切换",
+      "内存升级建议"
+    ]
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+  <link rel="stylesheet" href="ai-detector.css">
+</head>
+<body class="text-[#151515] bg-white">
+
+<!-- 导航栏 -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="#" class="flex items-center space-x-2.5">
+        <div class="w-9 h-9 bg-gradient-to-br from-[#165DFF] to-[#044AE9] rounded-xl flex items-center justify-center">
+          <span class="iconify text-white text-lg" data-icon="solar:cpu-bolt-bold-duotone"></span>
+        </div>
+        <span class="text-lg font-bold text-[#151515]">AI 跑分助手</span>
+      </a>
+      <div class="hidden md:flex items-center space-x-6 text-sm">
+        <a href="#detect"      class="text-[#6C6F7D] hover:text-[#165DFF] transition-colors font-medium">开始检测</a>
+        <a href="#models"      class="text-[#6C6F7D] hover:text-[#165DFF] transition-colors font-medium">模型列表</a>
+        <a href="#performance" class="text-[#6C6F7D] hover:text-[#165DFF] transition-colors font-medium">性能排行</a>
+        <a href="#tools"       class="text-[#6C6F7D] hover:text-[#165DFF] transition-colors font-medium">运行工具</a>
+        <a href="#faq"         class="text-[#6C6F7D] hover:text-[#165DFF] transition-colors font-medium">常见问题</a>
+        <!-- AI 产品推荐下拉 -->
+        <div class="nav-dropdown relative">
+          <button onclick="toggleNavDropdown(this)" class="flex items-center gap-1.5 text-[#6C6F7D] hover:text-[#165DFF] transition-colors font-medium cursor-pointer">
+            <span>AI 产品推荐</span>
+            <span class="px-1.5 py-0.5 bg-gradient-to-r from-[#165DFF] to-[#044AE9] text-white text-[9px] font-bold rounded-full leading-none">热门</span>
+            <span class="iconify text-sm transition-transform duration-200" data-icon="solar:alt-arrow-down-bold-duotone"></span>
+          </button>
+          <div class="nav-dropdown-menu">
+            <div class="bg-white rounded-2xl border border-[#E8ECFF] shadow-[0_8px_32px_rgba(0,0,0,0.12)] p-2 min-w-[268px]">
+              <div class="px-3 py-2 mb-1">
+                <span class="text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-wider">产品推荐</span>
+              </div>
+              <a href="https://jitword.com" target="_blank" class="nav-dropdown-item">
+                <div class="w-9 h-9 bg-gradient-to-br from-[#165DFF] to-[#044AE9] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="iconify text-white text-sm" data-icon="solar:document-bold-duotone"></span>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-[#151515]">JitWord 协同 AI 文档</div>
+                  <div class="text-xs text-[#9CA3AF]">AI 写作 · 多人协同 · 知识沉淀</div>
+                </div>
+              </a>
+              <a href="https://know.jitword.com" target="_blank" class="nav-dropdown-item">
+                <div class="w-9 h-9 bg-gradient-to-br from-[#8B5CF6] to-[#A78BFA] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="iconify text-white text-sm" data-icon="solar:book-bookmark-bold-duotone"></span>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-[#151515]">JitKnow AI 知识库</div>
+                  <div class="text-xs text-[#9CA3AF]">RAG 检索 · 私有化部署 · 智能问答</div>
+                </div>
+              </a>
+              <a href="https://pxcharts.turntip.cn" target="_blank" class="nav-dropdown-item">
+                <div class="w-9 h-9 bg-gradient-to-br from-[#10B981] to-[#34D399] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="iconify text-white text-sm" data-icon="solar:chart-2-bold-duotone"></span>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-[#151515]">Pxcharts 超级表格</div>
+                  <div class="text-xs text-[#9CA3AF]">数据可视化 · AI 报表 · 在线协作</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button onclick="startDetect()" class="px-4 py-2 bg-gradient-to-r from-[#165DFF] to-[#044AE9] text-white rounded-lg text-sm font-medium btn-glow hover:shadow-lg hover:shadow-blue-200 transition-all">
+        立即检测
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Hero 首屏 ===== -->
+<section class="relative min-h-screen flex items-center pt-16 overflow-hidden bg-[#F8FAFF]">
+  <div class="absolute inset-0 bg-grid"></div>
+  <div class="glow -top-32 -left-32"></div>
+  <div class="glow -bottom-32 -right-32 opacity-60"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <!-- 左侧文案 -->
+      <div class="fade-in-up">
+        <div class="inline-flex items-center space-x-2 px-4 py-2 bg-white rounded-full border border-[#E8ECFF] mb-6 shadow-sm">
+          <span class="w-2 h-2 bg-[#10B981] rounded-full animate-pulse"></span>
+          <span class="text-sm text-[#6C6F7D] font-medium">免费 · 无需注册 · 实时检测</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-[52px] font-bold leading-tight mb-5">
+          一键检测，你的电脑<br>
+          <span class="text-gradient">能跑哪些 AI 大模型？</span>
+        </h1>
+        <p class="text-lg text-[#6C6F7D] mb-8 leading-relaxed max-w-lg">
+          自动读取内存、CPU、GPU 配置，智能匹配 20+ 主流大模型兼容性，并估算本地运行速度，帮你在 5 秒内找到最适合的 AI 模型。
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 mb-10">
+          <button onclick="startDetect()" class="px-8 py-4 bg-gradient-to-r from-[#165DFF] to-[#044AE9] text-white rounded-xl font-semibold btn-glow hover:shadow-xl hover:shadow-blue-200 transition-all flex items-center justify-center space-x-2">
+            <span class="iconify text-xl" data-icon="solar:radar-2-bold-duotone"></span>
+            <span>开始硬件检测</span>
+          </button>
+          <a href="#models" class="px-8 py-4 bg-white text-[#151515] rounded-xl font-semibold border border-[#E8ECFF] hover:border-[#165DFF] hover:text-[#165DFF] transition-all flex items-center justify-center space-x-2">
+            <span class="iconify" data-icon="solar:list-bold-duotone"></span>
+            <span>查看全部模型</span>
+          </a>
+        </div>
+        <div class="grid grid-cols-3 gap-6">
+          <div><div class="text-2xl font-bold text-[#165DFF]">21+</div><div class="text-sm text-[#6C6F7D]">主流模型覆盖</div></div>
+          <div><div class="text-2xl font-bold text-[#165DFF]">5s</div><div class="text-sm text-[#6C6F7D]">极速检测完成</div></div>
+          <div><div class="text-2xl font-bold text-[#165DFF]">100%</div><div class="text-sm text-[#6C6F7D]">本地隐私安全</div></div>
+        </div>
+      </div>
+
+      <!-- 右侧动态卡片 -->
+      <div class="relative flex items-center justify-center lg:h-[520px]">
+        <div class="relative w-full max-w-md animate-float">
+          <div class="bg-white rounded-3xl shadow-2xl shadow-blue-100 p-6 border border-[#E8ECFF]">
+            <div class="flex items-center space-x-2 mb-5 pb-4 border-b border-[#E8ECFF]">
+              <div class="w-3 h-3 rounded-full bg-red-400"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+              <div class="w-3 h-3 rounded-full bg-green-400"></div>
+              <div class="flex-1 text-center text-sm text-[#6C6F7D] font-medium">AI 跑分助手 · 检测报告</div>
+            </div>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3 bg-[#F8FAFF] rounded-xl">
+                <div class="flex items-center space-x-3"><span class="iconify text-[#165DFF] text-xl" data-icon="solar:memory-bold-duotone"></span><span class="text-sm font-medium">系统内存</span></div>
+                <span class="text-sm font-bold text-[#10B981]">32 GB</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-[#F8FAFF] rounded-xl">
+                <div class="flex items-center space-x-3"><span class="iconify text-[#8B5CF6] text-xl" data-icon="solar:cpu-bold-duotone"></span><span class="text-sm font-medium">CPU 核心</span></div>
+                <span class="text-sm font-bold text-[#10B981]">16 核</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-[#F8FAFF] rounded-xl">
+                <div class="flex items-center space-x-3"><span class="iconify text-[#F59E0B] text-xl" data-icon="solar:graph-bold-duotone"></span><span class="text-sm font-medium">GPU</span></div>
+                <span class="text-sm font-bold text-[#10B981]">Apple M3</span>
+              </div>
+              <div class="mt-4 p-4 bg-gradient-to-r from-[#165DFF]/10 to-[#044AE9]/5 rounded-xl border border-[#165DFF]/20">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-semibold text-[#151515]">综合 AI 跑分</span>
+                  <span class="text-2xl font-bold text-[#165DFF]">87</span>
+                </div>
+                <div class="w-full bg-white rounded-full h-2 overflow-hidden">
+                  <div class="h-2 bg-gradient-to-r from-[#165DFF] to-[#044AE9] rounded-full" style="width:87%"></div>
+                </div>
+                <p class="text-xs text-[#6C6F7D] mt-2">可流畅运行 7B ~ 32B 量化模型</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="absolute -top-3 -right-3 bg-white rounded-2xl shadow-lg p-3 border border-[#E8ECFF] hidden sm:block">
+          <div class="flex items-center space-x-2">
+            <span class="iconify text-[#10B981] text-lg" data-icon="solar:check-circle-bold-duotone"></span>
+            <span class="text-sm font-semibold text-[#151515]">Llama 3.1 8B 流畅</span>
+          </div>
+        </div>
+        <div class="absolute -bottom-3 -left-3 bg-white rounded-2xl shadow-lg p-3 border border-[#E8ECFF] hidden sm:block">
+          <div class="flex items-center space-x-2">
+            <span class="iconify text-[#F59E0B] text-lg" data-icon="solar:flash-bold-duotone"></span>
+            <span class="text-sm font-semibold text-[#151515]">估算约 12 tokens/s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 检测面板 ===== -->
+<section id="detect" class="py-20 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-reveal">
+      <span class="inline-block px-4 py-1.5 bg-[#F0F5FF] text-[#165DFF] rounded-full text-sm font-medium mb-4">硬件检测</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-3">检测你的设备配置</h2>
+      <p class="text-[#6C6F7D] max-w-xl mx-auto">通过浏览器 API 安全读取设备信息，全程本地运行，无数据上传</p>
+    </div>
+
+    <!-- 空态 -->
+    <div id="detect-idle" class="text-center scroll-reveal">
+      <div class="bg-[#F8FAFF] border-2 border-dashed border-[#E8ECFF] rounded-3xl p-16 max-w-2xl mx-auto">
+        <div class="w-20 h-20 bg-gradient-to-br from-[#165DFF]/10 to-[#044AE9]/5 rounded-3xl flex items-center justify-center mx-auto mb-6">
+          <span class="iconify text-[#165DFF] text-4xl" data-icon="solar:radar-2-bold-duotone"></span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">准备开始检测</h3>
+        <p class="text-[#6C6F7D] mb-8 max-w-sm mx-auto text-sm leading-relaxed">点击下方按钮，将自动检测内存大小、CPU 核数、GPU 型号，仅需几秒即可完成</p>
+        <button onclick="startDetect()" class="px-10 py-4 bg-gradient-to-r from-[#165DFF] to-[#044AE9] text-white rounded-xl font-semibold btn-glow hover:shadow-xl hover:shadow-blue-200 transition-all inline-flex items-center space-x-2">
+          <span class="iconify text-xl" data-icon="solar:play-bold-duotone"></span>
+          <span>开始检测</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 扫描动画态 -->
+    <div id="detect-scanning" class="hidden">
+      <div class="bg-[#F8FAFF] rounded-3xl p-10 max-w-2xl mx-auto border border-[#E8ECFF]">
+        <div class="text-center mb-8">
+          <div class="relative w-16 h-16 mx-auto mb-4">
+            <div class="absolute inset-0 rounded-full border-4 border-[#165DFF]/20 pulse-ring"></div>
+            <div class="w-16 h-16 bg-gradient-to-br from-[#165DFF] to-[#044AE9] rounded-full flex items-center justify-center">
+              <span class="iconify text-white text-2xl" data-icon="solar:radar-2-bold-duotone"></span>
+            </div>
+          </div>
+          <h3 class="text-lg font-bold text-[#151515]">正在扫描硬件配置...</h3>
+        </div>
+        <div class="space-y-4">
+          <div id="step-ram" class="scan-step flex items-center space-x-4 p-4 bg-white rounded-xl border border-[#E8ECFF]">
+            <span class="iconify text-[#165DFF] text-2xl" data-icon="solar:memory-bold-duotone"></span>
+            <div class="flex-1"><div class="text-sm font-semibold">检测系统内存</div><div class="text-xs text-[#6C6F7D]">读取 RAM 大小...</div></div>
+            <span id="step-ram-status" class="iconify text-gray-300 text-xl" data-icon="solar:clock-circle-bold-duotone"></span>
+          </div>
+          <div id="step-cpu" class="scan-step flex items-center space-x-4 p-4 bg-white rounded-xl border border-[#E8ECFF]">
+            <span class="iconify text-[#8B5CF6] text-2xl" data-icon="solar:cpu-bold-duotone"></span>
+            <div class="flex-1"><div class="text-sm font-semibold">检测 CPU 核心数</div><div class="text-xs text-[#6C6F7D]">读取逻辑核数...</div></div>
+            <span id="step-cpu-status" class="iconify text-gray-300 text-xl" data-icon="solar:clock-circle-bold-duotone"></span>
+          </div>
+          <div id="step-gpu" class="scan-step flex items-center space-x-4 p-4 bg-white rounded-xl border border-[#E8ECFF]">
+            <span class="iconify text-[#F59E0B] text-2xl" data-icon="solar:graph-bold-duotone"></span>
+            <div class="flex-1"><div class="text-sm font-semibold">检测 GPU 信息</div><div class="text-xs text-[#6C6F7D]">通过 WebGL 读取渲染器...</div></div>
+            <span id="step-gpu-status" class="iconify text-gray-300 text-xl" data-icon="solar:clock-circle-bold-duotone"></span>
+          </div>
+          <div id="step-score" class="scan-step flex items-center space-x-4 p-4 bg-white rounded-xl border border-[#E8ECFF]">
+            <span class="iconify text-[#10B981] text-2xl" data-icon="solar:chart-2-bold-duotone"></span>
+            <div class="flex-1"><div class="text-sm font-semibold">计算综合评分</div><div class="text-xs text-[#6C6F7D]">分析模型兼容性...</div></div>
+            <span id="step-score-status" class="iconify text-gray-300 text-xl" data-icon="solar:clock-circle-bold-duotone"></span>
+          </div>
+        </div>
+        <div class="mt-6 bg-[#E8ECFF] rounded-full h-2 overflow-hidden">
+          <div id="scan-progress" class="h-2 bg-gradient-to-r from-[#165DFF] to-[#044AE9] rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 结果态 -->
+    <div id="detect-result" class="hidden">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="card-hover bg-white rounded-2xl p-6 border border-[#E8ECFF] text-center shadow-sm">
+          <div class="w-12 h-12 feature-icon-bg rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="iconify text-[#165DFF] text-2xl" data-icon="solar:memory-bold-duotone"></span>
+          </div>
+          <div class="text-xs text-[#6C6F7D] mb-1">系统内存</div>
+          <div id="res-ram" class="text-3xl font-bold text-[#151515]">--</div>
+          <div class="text-xs text-[#6C6F7D] mt-1">GB RAM</div>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-[#E8ECFF] text-center shadow-sm">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#8B5CF6]/10 to-[#8B5CF6]/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="iconify text-[#8B5CF6] text-2xl" data-icon="solar:cpu-bold-duotone"></span>
+          </div>
+          <div class="text-xs text-[#6C6F7D] mb-1">CPU 核心</div>
+          <div id="res-cpu" class="text-3xl font-bold text-[#151515]">--</div>
+          <div class="text-xs text-[#6C6F7D] mt-1">逻辑核心</div>
+        </div>
+        <div class="card-hover bg-white rounded-2xl p-6 border border-[#E8ECFF] text-center shadow-sm">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#F59E0B]/10 to-[#F59E0B]/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="iconify text-[#F59E0B] text-2xl" data-icon="solar:graph-bold-duotone"></span>
+          </div>
+          <div class="text-xs text-[#6C6F7D] mb-1">GPU / 显卡</div>
+          <div id="res-gpu" class="text-sm font-bold text-[#151515] leading-tight">--</div>
+          <div class="text-xs text-[#6C6F7D] mt-1">渲染器信息</div>
+        </div>
+        <div class="card-hover bg-gradient-to-br from-[#165DFF] to-[#044AE9] rounded-2xl p-6 text-center text-white shadow-lg">
+          <div class="relative mx-auto mb-3" style="width:72px;height:72px">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" class="absolute inset-0">
+              <circle cx="36" cy="36" r="30" stroke="rgba(255,255,255,0.2)" stroke-width="6" fill="none"/>
+              <circle id="score-circle" cx="36" cy="36" r="30" stroke="white" stroke-width="6" fill="none"
+                stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
+                transform="rotate(-90 36 36)"/>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span id="res-score" class="text-2xl font-bold">--</span>
+            </div>
+          </div>
+          <div class="text-xs text-blue-100 mb-1">综合 AI 跑分</div>
+          <div id="res-level" class="text-sm font-semibold">检测中</div>
+        </div>
+      </div>
+      <div id="res-summary" class="bg-[#F0F5FF] border border-[#E8ECFF] rounded-2xl p-5 mb-6 flex items-start space-x-4">
+        <span class="iconify text-[#165DFF] text-2xl mt-0.5 flex-shrink-0" data-icon="solar:info-circle-bold-duotone"></span>
+        <div>
+          <div class="font-semibold text-[#151515] mb-1" id="res-summary-title">检测完成</div>
+          <div class="text-sm text-[#6C6F7D]" id="res-summary-text">正在分析结果...</div>
+        </div>
+      </div>
+      <!-- 升级建议横幅 -->
+      <div id="upgrade-banner" class="hidden upgrade-banner flex items-start gap-3 mb-5">
+        <span class="iconify text-[#F59E0B] text-2xl flex-shrink-0 mt-0.5" data-icon="solar:rocket-2-bold-duotone"></span>
+        <div class="flex-1">
+          <div class="font-semibold text-sm text-[#151515] mb-0.5">内存升级建议</div>
+          <div class="text-sm text-[#6C6F7D]" id="banner-text"></div>
+        </div>
+        <button onclick="document.getElementById('upgrade-banner').classList.add('hidden')" class="text-[#9CA3AF] hover:text-[#6C6F7D] transition-colors flex-shrink-0">
+          <span class="iconify text-lg" data-icon="solar:close-bold"></span>
+        </button>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <button onclick="startDetect()" class="px-6 py-3 border border-[#E8ECFF] text-[#6C6F7D] rounded-xl text-sm font-medium hover:border-[#165DFF] hover:text-[#165DFF] transition-all inline-flex items-center space-x-2">
+          <span class="iconify" data-icon="solar:refresh-bold-duotone"></span>
+          <span>重新检测</span>
+        </button>
+        <button id="copy-btn" onclick="copyReport()" class="px-6 py-3 bg-gradient-to-r from-[#165DFF] to-[#044AE9] text-white rounded-xl text-sm font-semibold btn-glow hover:shadow-lg hover:shadow-blue-200 transition-all inline-flex items-center gap-2">
+          <span class="iconify" data-icon="solar:copy-bold-duotone"></span>
+          <span>复制报告</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 为你推荐 ===== -->
+<section id="recommended" class="hidden py-16 bg-gradient-to-br from-[#F0F5FF] to-[#E8ECFF]">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-9 h-9 bg-gradient-to-br from-[#165DFF] to-[#044AE9] rounded-xl flex items-center justify-center">
+            <span class="iconify text-white text-lg" data-icon="solar:stars-bold-duotone"></span>
+          </div>
+          <h2 class="text-2xl font-bold">为你推荐</h2>
+        </div>
+        <p class="text-[#6C6F7D] text-sm">根据你的硬件配置，精选最适合的 AI 大模型</p>
+      </div>
+      <a href="#models" class="text-sm text-[#165DFF] font-semibold hover:underline flex items-center gap-1">
+        查看全部 <span class="iconify text-sm" data-icon="solar:arrow-right-bold-duotone"></span>
+      </a>
+    </div>
+    <div id="rec-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </div>
+</section>
+
+<!-- ===== 模型兼容性列表 ===== -->
+<section id="models" class="py-20 bg-[#F8FAFF]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10 scroll-reveal">
+      <span class="inline-block px-4 py-1.5 bg-white text-[#165DFF] rounded-full text-sm font-medium mb-4 border border-[#E8ECFF]">模型兼容性</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-3">21+ 主流大模型兼容分析</h2>
+      <p class="text-[#6C6F7D] max-w-xl mx-auto">涵盖 Llama、Qwen、Phi、Mistral、DeepSeek 等主流开源模型，实时显示你的设备兼容情况</p>
+    </div>
+
+    <!-- 搜索 + 量化切换工具栏 -->
+    <div class="flex flex-col sm:flex-row gap-3 mb-5 scroll-reveal items-center justify-center">
+      <div class="relative w-full sm:w-72">
+        <span class="iconify absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9CA3AF] pointer-events-none text-base" data-icon="solar:magnifer-bold-duotone"></span>
+        <input type="search" id="model-search" class="model-search-input" placeholder="搜索模型名称、系列..." oninput="handleSearch(this.value)">
+      </div>
+      <div class="quant-toggle">
+        <button class="quant-btn active" data-quant="q4" onclick="setQuant('q4')">Q4 量化</button>
+        <button class="quant-btn" data-quant="q8" onclick="setQuant('q8')">Q8 量化</button>
+      </div>
+      <div class="text-xs text-[#6C6F7D] bg-white px-3 py-2 rounded-lg border border-[#E8ECFF] flex items-center gap-1.5 flex-shrink-0">
+        <span class="iconify text-[#F59E0B] text-base" data-icon="solar:info-circle-bold-duotone"></span>
+        Q8 内存需求约为 Q4 的 2&times;
+      </div>
+    </div>
+
+    <!-- 过滤 Tabs（使用 data-filter 精确控制激活状态）-->
+    <div class="flex flex-wrap justify-center gap-3 mb-8 scroll-reveal">
+      <button class="tab-btn active px-5 py-2 rounded-full text-sm font-medium border border-[#E8ECFF] bg-white text-[#6C6F7D]"
+              data-filter="all" onclick="filterModels('all', this)">全部模型</button>
+      <button class="tab-btn px-5 py-2 rounded-full text-sm font-medium border border-[#E8ECFF] bg-white text-[#6C6F7D]"
+              data-filter="full" onclick="filterModels('full', this)">
+        <span class="inline-block w-2 h-2 bg-[#10B981] rounded-full mr-1.5 align-middle"></span>流畅运行
+      </button>
+      <button class="tab-btn px-5 py-2 rounded-full text-sm font-medium border border-[#E8ECFF] bg-white text-[#6C6F7D]"
+              data-filter="marginal" onclick="filterModels('marginal', this)">
+        <span class="inline-block w-2 h-2 bg-[#F59E0B] rounded-full mr-1.5 align-middle"></span>勉强运行
+      </button>
+      <button class="tab-btn px-5 py-2 rounded-full text-sm font-medium border border-[#E8ECFF] bg-white text-[#6C6F7D]"
+              data-filter="unsupported" onclick="filterModels('unsupported', this)">
+        <span class="inline-block w-2 h-2 bg-[#FF6B6B] rounded-full mr-1.5 align-middle"></span>暂不支持
+      </button>
+      <button class="tab-btn px-5 py-2 rounded-full text-sm font-medium border border-[#E8ECFF] bg-white text-[#6C6F7D]"
+              data-filter="code" onclick="filterModels('code', this)">代码模型</button>
+      <button class="tab-btn px-5 py-2 rounded-full text-sm font-medium border border-[#E8ECFF] bg-white text-[#6C6F7D]"
+              data-filter="multimodal" onclick="filterModels('multimodal', this)">多模态</button>
+    </div>
+
+    <!-- 模型卡片网格（由 JS 渲染）-->
+    <div id="model-grid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+    <div id="model-empty" class="hidden text-center py-16">
+      <span class="iconify text-gray-300 text-5xl mx-auto mb-4 block" data-icon="solar:box-minimalistic-bold-duotone"></span>
+      <p class="text-[#6C6F7D]">该分类下暂无匹配模型，请先完成硬件检测</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 性能速度排行 ===== -->
+<section id="performance" class="py-20 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-reveal">
+      <span class="inline-block px-4 py-1.5 bg-[#F0F5FF] text-[#165DFF] rounded-full text-sm font-medium mb-4">性能估算</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-3">模型运行速度排行</h2>
+      <p class="text-[#6C6F7D] max-w-xl mx-auto">基于你的硬件配置估算各模型生成速度（tokens/秒），数值仅供参考，实际以真实测试为准</p>
+    </div>
+    <div id="perf-tip" class="bg-[#FFF8E7] border border-[#F59E0B]/30 rounded-2xl p-5 mb-8 flex items-center space-x-3 scroll-reveal">
+      <span class="iconify text-[#F59E0B] text-2xl flex-shrink-0" data-icon="solar:lightbulb-bold-duotone"></span>
+      <p class="text-sm text-[#6C6F7D]">
+        请先完成<a href="#detect" class="text-[#165DFF] font-semibold mx-1 cursor-pointer" onclick="startDetect()">硬件检测</a>，将自动显示可运行模型的速度排行
+      </p>
+    </div>
+    <!-- 性能排行列表（由 JS 渲染）-->
+    <div id="perf-list"></div>
+  </div>
+</section>
+
+<!-- ===== 运行工具推荐 ===== -->
+<section id="tools" class="py-20 bg-[#F8FAFF]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-reveal">
+      <span class="inline-block px-4 py-1.5 bg-white text-[#165DFF] rounded-full text-sm font-medium mb-4 border border-[#E8ECFF]">运行工具</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-3">选择你的本地运行工具</h2>
+      <p class="text-[#6C6F7D] max-w-xl mx-auto">以下三款主流工具可在本地运行大模型，根据技术背景选择最适合的</p>
+    </div>
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Ollama -->
+      <div class="card-hover bg-white rounded-3xl p-8 border border-[#E8ECFF] shadow-sm scroll-reveal flex flex-col">
+        <div class="w-16 h-16 bg-gradient-to-br from-[#165DFF] to-[#044AE9] rounded-2xl flex items-center justify-center mb-6">
+          <span class="iconify text-white text-3xl" data-icon="solar:server-2-bold-duotone"></span>
+        </div>
+        <div class="flex items-center space-x-2 mb-3">
+          <h3 class="text-xl font-bold">Ollama</h3>
+          <span class="px-2.5 py-0.5 bg-[#10B981]/10 text-[#10B981] rounded-full text-xs font-semibold">推荐新手</span>
+        </div>
+        <p class="text-[#6C6F7D] text-sm mb-5 leading-relaxed flex-1">命令行工具，一行命令即可下载并运行大模型，支持 macOS / Linux / Windows，生态最完善，模型库最丰富。</p>
+        <div class="bg-[#151515] rounded-xl p-3 mb-5 font-mono text-sm text-green-400">
+          <div class="text-gray-500 text-xs mb-1"># 一键安装并运行</div>
+          ollama run qwen2.5
+        </div>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="px-3 py-1 bg-[#F0F5FF] text-[#165DFF] rounded-full text-xs">300+ 模型</span>
+          <span class="px-3 py-1 bg-[#F0F5FF] text-[#165DFF] rounded-full text-xs">REST API</span>
+          <span class="px-3 py-1 bg-[#F0F5FF] text-[#165DFF] rounded-full text-xs">多平台</span>
+        </div>
+        <a href="https://ollama.com" target="_blank" rel="noopener" class="block w-full py-3 text-center bg-gradient-to-r from-[#165DFF] to-[#044AE9] text-white rounded-xl font-semibold btn-glow hover:shadow-lg hover:shadow-blue-200 transition-all">前往 ollama.com</a>
+      </div>
+
+      <!-- LM Studio -->
+      <div class="card-hover bg-white rounded-3xl p-8 border-2 border-[#165DFF] shadow-xl shadow-blue-100 scroll-reveal flex flex-col relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-gradient-to-br from-[#165DFF] to-[#044AE9] text-white text-xs font-bold px-4 py-1.5 rounded-bl-2xl">图形界面</div>
+        <div class="w-16 h-16 bg-gradient-to-br from-[#8B5CF6] to-[#A78BFA] rounded-2xl flex items-center justify-center mb-6">
+          <span class="iconify text-white text-3xl" data-icon="solar:monitor-bold-duotone"></span>
+        </div>
+        <div class="flex items-center space-x-2 mb-3">
+          <h3 class="text-xl font-bold">LM Studio</h3>
+          <span class="px-2.5 py-0.5 bg-[#8B5CF6]/10 text-[#8B5CF6] rounded-full text-xs font-semibold">零基础友好</span>
+        </div>
+        <p class="text-[#6C6F7D] text-sm mb-5 leading-relaxed flex-1">桌面 GUI 应用，无需命令行，可视化管理和聊天界面，可直接搜索下载 HuggingFace 模型，非常适合不懂技术的用户。</p>
+        <div class="space-y-2 mb-6">
+          <div class="flex items-center space-x-2 text-sm text-[#6C6F7D]"><span class="iconify text-[#10B981]" data-icon="solar:check-circle-bold-duotone"></span><span>内置聊天界面</span></div>
+          <div class="flex items-center space-x-2 text-sm text-[#6C6F7D]"><span class="iconify text-[#10B981]" data-icon="solar:check-circle-bold-duotone"></span><span>模型搜索 & 一键下载</span></div>
+          <div class="flex items-center space-x-2 text-sm text-[#6C6F7D]"><span class="iconify text-[#10B981]" data-icon="solar:check-circle-bold-duotone"></span><span>本地 OpenAI 兼容 API</span></div>
+        </div>
+        <a href="https://lmstudio.ai" target="_blank" rel="noopener" class="block w-full py-3 text-center bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-200 transition-all">前往 lmstudio.ai</a>
+      </div>
+
+      <!-- llama.cpp -->
+      <div class="card-hover bg-white rounded-3xl p-8 border border-[#E8ECFF] shadow-sm scroll-reveal flex flex-col">
+        <div class="w-16 h-16 bg-gradient-to-br from-[#00C9A7] to-[#00E5B8] rounded-2xl flex items-center justify-center mb-6">
+          <span class="iconify text-white text-3xl" data-icon="solar:code-2-bold-duotone"></span>
+        </div>
+        <div class="flex items-center space-x-2 mb-3">
+          <h3 class="text-xl font-bold">llama.cpp</h3>
+          <span class="px-2.5 py-0.5 bg-[#00C9A7]/10 text-[#00C9A7] rounded-full text-xs font-semibold">开发者首选</span>
+        </div>
+        <p class="text-[#6C6F7D] text-sm mb-5 leading-relaxed flex-1">纯 C++ 实现，性能最优，支持 CPU/GPU 混合推理，内存占用最低，可集成到任何项目，是 Ollama 等工具的底层引擎。</p>
+        <div class="bg-[#151515] rounded-xl p-3 mb-5 font-mono text-sm text-green-400">
+          <div class="text-gray-500 text-xs mb-1"># 编译并运行模型</div>
+          ./llama-cli -m model.gguf -p "你好"
+        </div>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="px-3 py-1 bg-teal-50 text-[#00C9A7] rounded-full text-xs">极低内存</span>
+          <span class="px-3 py-1 bg-teal-50 text-[#00C9A7] rounded-full text-xs">GGUF 格式</span>
+          <span class="px-3 py-1 bg-teal-50 text-[#00C9A7] rounded-full text-xs">开源免费</span>
+        </div>
+        <a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener" class="block w-full py-3 text-center border-2 border-[#00C9A7] text-[#00C9A7] rounded-xl font-semibold hover:bg-[#00C9A7] hover:text-white transition-all">前往 GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ 常见问题 ===== -->
+<section id="faq" class="py-20 bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 scroll-reveal">
+      <span class="inline-block px-4 py-1.5 bg-[#F0F5FF] text-[#165DFF] rounded-full text-sm font-medium mb-4">常见问题</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-3">你可能想知道的</h2>
+    </div>
+    <div id="faq-list" class="space-y-4 scroll-reveal"></div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="bg-[#151515] text-white py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-9 h-9 bg-gradient-to-br from-[#165DFF] to-[#044AE9] rounded-xl flex items-center justify-center">
+          <span class="iconify text-white text-lg" data-icon="solar:cpu-bolt-bold-duotone"></span>
+        </div>
+        <span class="text-lg font-bold">AI 跑分助手</span>
+      </div>
+      <div class="flex flex-wrap gap-5 text-sm text-gray-400">
+        <a href="#detect"      class="hover:text-white transition-colors">开始检测</a>
+        <a href="#models"      class="hover:text-white transition-colors">模型列表</a>
+        <a href="#performance" class="hover:text-white transition-colors">性能排行</a>
+        <a href="#tools"       class="hover:text-white transition-colors">运行工具</a>
+        <a href="#faq"         class="hover:text-white transition-colors">常见问题</a>
+      </div>
+    </div>
+    <div class="pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-sm text-gray-500">© 2026 AI 跑分助手. 检测数据仅供参考，实际性能因系统环境而异。</p>
+      <p class="text-sm text-gray-500">本工具完全在浏览器本地运行，不收集任何用户数据。</p>
+    </div>
+  </div>
+</footer>
+
+<script src="ai-detector.js"></script>
+
+<!-- ===== 悬浮二维码卡片 ===== -->
+<div id="float-qr" class="float-qr-wrap">
+  <!-- 展开的二维码卡片 -->
+  <div class="float-qr-card" id="float-qr-card">
+    <button class="float-qr-close" onclick="document.getElementById('float-qr').classList.add('float-qr-hidden')" title="关闭">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="text-center">
+      <img src="https://next.jitword.com/uploads/qrcode_19d716f2d29.jpg"
+           alt="关注二维码" width="148" height="148"
+           class="float-qr-img mx-auto block">
+      <div class="mt-3 font-semibold text-[#151515] text-sm">扫码关注</div>
+      <div class="mt-1 text-xs text-[#6C6F7D] leading-relaxed">更多 AI 工具 · 开源资源<br>第一时间获取最新动态</div>
+    </div>
+  </div>
+  <!-- 触发按鈕 -->
+  <button class="float-qr-btn" onclick="toggleFloatQR()" title="扫码关注，更多精彩">
+    <span class="iconify text-xl" data-icon="solar:qr-code-bold-duotone"></span>
+    <span class="float-qr-label">关注</span>
+  </button>
+</div>
+</html>
